@@ -15,7 +15,7 @@ This widget provides you with your Dreamscape balance on your WHMCS admin dashbo
 * Upload to your WHMCS install, if you are uploading just 'DreamscapeBalance.php' make sure to upload it to: /WHMCS-Directory/modules/widgets/
 
 ## Requirements
-* PHP's SOAP Extenstion must be enabled
+* PHP's SOAP Extension must be enabled
 
 ## WHMCS Tested Versions
 * 8.1
