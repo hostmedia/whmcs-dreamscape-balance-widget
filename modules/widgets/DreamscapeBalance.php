@@ -18,7 +18,7 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
     protected $description = 'Widget provides you with your Dreamscape (reseller.ds.network) balance on your admin dashboard. Created by Host Media.';
     protected $weight = 150;
     protected $columns = 1;
-    protected $cache = false;
+    protected $cache = true;
     protected $cacheExpiry = 120;
 
     public function getData()
