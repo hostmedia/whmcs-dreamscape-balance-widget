@@ -54,6 +54,7 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
 
       $dataArray = array(
         dreamscape => $response->APIResponse
+        , balance => $response->APIResponse->Balance
       );
 
       return $dataArray;
@@ -61,6 +62,7 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
 
     public function generateOutput($data)
     {
+
         if (isset($data['dreamscape']->Errors)) {
 
 return <<<EOF
@@ -75,7 +77,7 @@ EOF;
     <div class="widget-content-padded">
         <div class="row text-center">
             <div class="col-sm-12">
-                <h4><strong>{$data['dreamscape']->Balance}</strong></h4>
+                <h4><strong>{$data['balance']}</strong></h4>
                 Balance
             </div>
         </div>
