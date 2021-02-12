@@ -28,4 +28,4 @@ This widget provides you with your Dreamscape balance on your WHMCS admin dashbo
 * WHMCS Marketplace: TBC
 
 ## Preview
-![Widget Preview](https://www.hostmedia.co.uk/resources/images/knowledgebase/dreamscape-balance-widget.png)
+![Widget Preview](https://www.hostmedia.co.uk/client/images/kb/8_dreamscape-balance-widget.png)
