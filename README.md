@@ -23,9 +23,9 @@ This widget provides you with your Dreamscape balance on your WHMCS admin dashbo
 * 7.10
 
 ## Links
-* Authors Website: https://www.hostmedia.co.uk/
-* Knowledge Base: https://www.hostmedia.co.uk/client/knowledgebase/201204257/WHMCS-Dreamscape-Balance-Widget.html
+* Authors Website: https://hostmedia.uk/
+* Knowledge Base: https://hostmedia.uk/client/knowledgebase/201204257/WHMCS-Dreamscape-Balance-Widget.html
 * WHMCS Marketplace: https://marketplace.whmcs.com/product/5817-dreamscape-balance-widget
 
 ## Preview
-![Widget Preview](https://www.hostmedia.co.uk/client/images/kb/8_dreamscape-balance-widget.png)
+![Widget Preview](https://hostmedia.uk/client/images/kb/8_dreamscape-balance-widget.png)
