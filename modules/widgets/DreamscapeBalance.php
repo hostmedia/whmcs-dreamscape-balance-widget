@@ -53,8 +53,8 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
       $response = $this->reseller_api_soap_client->__soapCall('GetBalance', $prepared_data);
 
       $dataArray = array(
-        dreamscape => $response->APIResponse
-        , balance => $response->APIResponse->Balance
+        'dreamscape' => $response->APIResponse
+        , 'balance' => $response->APIResponse->Balance
       );
 
       return $dataArray;
