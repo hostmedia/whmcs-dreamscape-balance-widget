@@ -18,8 +18,7 @@ This widget provides you with your Dreamscape balance on your WHMCS admin dashbo
 * PHP's SOAP Extension must be enabled
 
 ## WHMCS Tested Versions
-* 8.1
-* 8.0
+* 8.0 - 8.8
 * 7.10
 
 ## Links
