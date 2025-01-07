@@ -3,10 +3,11 @@
 /**
  * Name: WHMCS Dreamscape Balance Widget
  * Description: This widget provides you with your Dreamscape balance on your WHMCS admin dashboard.
- * Version 1.0
+ * Version 1.1
  * Created by Host Media Ltd
- * Website: https://www.hostmedia.co.uk/
+ * Website: https://hostmedia.uk/
  */
+
 
 add_hook('AdminHomeWidgets', 1, function() {
     return new dreamscapeBalanceWidget();
@@ -24,37 +25,29 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
     public function getData()
     {
       // Config
+      // Change [ResellerID] with your Reseller ID from reseller.ds.network
+      // Change [APIKey] with your API ID from reseller.ds.network
       $reseller_id = '[ResellerID]';
-    	$api_key = '[APIKey]';
+      $api_key = '[APIKey]';
 
-      // API URL
-      // Live
-      $soap_location = 'https://soap.secureapi.com.au/API-2.0';
-      $wsdl_location = 'https://soap.secureapi.com.au/wsdl/API-2.0.wsdl';
+      $request_id = md5(uniqid() . microtime(true));
+      $signature = md5($request_id . $api_key);
+      $ch = curl_init();
 
-      // Test
-      //$soap_location = 'https://soap-test.secureapi.com.au/API-2.0';
-      //$wsdl_location = 'https://soap-test.secureapi.com.au/wsdl/API-2.0.wsdl';
-
-      // Set the login headers
-      $authenticate = array();
-      $authenticate['AuthenticateRequest'] = array();
-      $authenticate['AuthenticateRequest']['ResellerID'] = $reseller_id;
-      $authenticate['AuthenticateRequest']['APIKey'] = $api_key;
-
-      // Convert $authenticate to a soap variable
-      $authenticate['AuthenticateRequest'] = new SoapVar($authenticate['AuthenticateRequest'], SOAP_ENC_OBJECT);
-      $authenticate = new SoapVar($authenticate, SOAP_ENC_OBJECT);
-      $header = new SoapHeader($soap_location, 'Authenticate', $authenticate, false);
-      $this->reseller_api_soap_client = new SoapClient($wsdl_location, array('soap_version' => SOAP_1_2, 'cache_wsdl' => WSDL_CACHE_NONE));
-      $this->reseller_api_soap_client->__setSoapHeaders(array($header));
-
-      $prepared_data = array();
-      $response = $this->reseller_api_soap_client->__soapCall('GetBalance', $prepared_data);
+      curl_setopt_array($ch, [
+          CURLOPT_URL => 'https://reseller-api.ds.network/finances/balance',
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_HTTPHEADER => [
+              'Api-Request-Id: ' . $request_id,
+              'Api-Signature: ' . $signature,
+          ],
+      ]);
+      $response = json_decode(curl_exec($ch));
+      curl_close($ch);
 
       $dataArray = array(
-        'dreamscape' => $response->APIResponse
-        , 'balance' => $response->APIResponse->Balance
+        'dreamscape' => $response
+        , 'balance' => $response->data->balance
       );
 
       return $dataArray;
@@ -62,13 +55,12 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
 
     public function generateOutput($data)
     {
-
-        if (isset($data['dreamscape']->Errors)) {
+        if (isset($data['dreamscape']->error_message)) {
 
 return <<<EOF
-    <div class="widget-content-padded">
+    <div class="widget-content-padded text-center">
         <strong>There was an error:</strong><br/>
-        {$data['dreamscape']->Errors[0]->Message}
+        {$data['dreamscape']->error_message}
     </div>
 EOF;
         }
