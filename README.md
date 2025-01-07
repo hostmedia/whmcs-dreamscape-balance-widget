@@ -14,17 +14,14 @@ This widget provides you with your Dreamscape balance on your WHMCS admin dashbo
 * You can disable caching on the widget or change the length of time the cache lasts using the config at the top 
 * Upload to your WHMCS install, if you are uploading just 'DreamscapeBalance.php' make sure to upload it to: /WHMCS-Directory/modules/widgets/
 
-## Requirements
-* PHP's SOAP Extension must be enabled
-
 ## WHMCS Tested Versions
-* 8.0 - 8.8
+* 8.0 - 8.11
 * 7.10
 
 ## Links
 * Authors Website: https://hostmedia.uk/
-* Knowledge Base: https://hostmedia.uk/client/knowledgebase/201204257/WHMCS-Dreamscape-Balance-Widget.html
+* Knowledge Base: https://portal.hostmedia.uk/knowledgebase/201204257/WHMCS-Dreamscape-Balance-Widget.html
 * WHMCS Marketplace: https://marketplace.whmcs.com/product/5817-dreamscape-balance-widget
 
 ## Preview
-![Widget Preview](https://hostmedia.uk/client/images/kb/8_dreamscape-balance-widget.png)
+![Widget Preview](https://portal.hostmedia.uk/images/kb/8_dreamscape-balance-widget.png)
