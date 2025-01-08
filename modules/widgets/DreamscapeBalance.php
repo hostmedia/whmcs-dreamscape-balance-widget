@@ -3,7 +3,7 @@
 /**
  * Name: WHMCS Dreamscape Balance Widget
  * Description: This widget provides you with your Dreamscape balance on your WHMCS admin dashboard.
- * Version 1.1
+ * Version 1.1.1
  * Created by Host Media Ltd
  * Website: https://hostmedia.uk/
  */
@@ -48,6 +48,7 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
       $dataArray = array(
         'dreamscape' => $response
         , 'balance' => $response->data->balance
+        , 'currency' => $response->data->currency
       );
 
       return $dataArray;
@@ -69,7 +70,7 @@ EOF;
     <div class="widget-content-padded">
         <div class="row text-center">
             <div class="col-sm-12">
-                <h4><strong>{$data['balance']}</strong></h4>
+                <h4><strong>{$data['balance']} {$data['currency']}</strong></h4>
                 Balance
             </div>
         </div>
