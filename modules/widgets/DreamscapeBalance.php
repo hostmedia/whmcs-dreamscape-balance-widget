@@ -3,9 +3,9 @@
 /**
  * Name: WHMCS Dreamscape Balance Widget
  * Description: This widget provides you with your Dreamscape balance on your WHMCS admin dashboard.
- * Version 1.1.1
+ * Version 1.2.0
  * Created by Host Media Ltd
- * Website: https://hostmedia.uk/
+ * Website: https://www.hostmedia.co.uk/
  */
 
 
@@ -24,34 +24,73 @@ class dreamscapeBalanceWidget extends \WHMCS\Module\AbstractWidget
 
     public function getData()
     {
-      // Config
-      // Change [ResellerID] with your Reseller ID from reseller.ds.network
-      // Change [APIKey] with your API ID from reseller.ds.network
-      $reseller_id = '[ResellerID]';
-      $api_key = '[APIKey]';
+        // Config
+        // Change [ResellerID] with your Reseller ID from reseller.ds.network
+        // Change [APIKey] with your API ID from reseller.ds.network
+        $reseller_id = '[ResellerID]';
+        $api_key = '[APIKey]';
 
-      $request_id = md5(uniqid() . microtime(true));
-      $signature = md5($request_id . $api_key);
-      $ch = curl_init();
+        // Timeout configuration (in seconds)
+        $connect_timeout = 5;  // Max time to establish connection
+        $request_timeout = 10; // Max total time for the request
 
-      curl_setopt_array($ch, [
-          CURLOPT_URL => 'https://reseller-api.ds.network/finances/balance',
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_HTTPHEADER => [
-              'Api-Request-Id: ' . $request_id,
-              'Api-Signature: ' . $signature,
-          ],
-      ]);
-      $response = json_decode(curl_exec($ch));
-      curl_close($ch);
+        $request_id = md5(uniqid() . microtime(true));
+        $signature = md5($request_id . $api_key);
+        $ch = curl_init();
 
-      $dataArray = array(
+        curl_setopt_array($ch, [
+            CURLOPT_URL => 'https://reseller-api.ds.network/finances/balance',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HTTPHEADER => [
+                'Api-Request-Id: ' . $request_id,
+                'Api-Signature: ' . $signature,
+            ],
+            CURLOPT_CONNECTTIMEOUT => $connect_timeout,
+            CURLOPT_TIMEOUT => $request_timeout,
+            CURLOPT_FAILONERROR => false,
+        ]);
+
+        $result = curl_exec($ch);
+        $curl_error = curl_error($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        // Handle cURL errors (timeout, connection refused, etc.)
+        if ($result === false || !empty($curl_error)) {
+            return [
+                'dreamscape' => (object)['error_message' => 'API unavailable: ' . ($curl_error ?: 'Connection failed')],
+                'balance' => null,
+                'currency' => null,
+            ];
+        }
+
+        // Handle HTTP errors
+        if ($http_code >= 400) {
+            return [
+                'dreamscape' => (object)['error_message' => 'API returned HTTP ' . $http_code],
+                'balance' => null,
+                'currency' => null,
+            ];
+        }
+
+        $response = json_decode($result);
+
+        // Handle JSON decode errors
+        if ($response === null && json_last_error() !== JSON_ERROR_NONE) {
+            return [
+                'dreamscape' => (object)['error_message' => 'Invalid API response'],
+                'balance' => null,
+                'currency' => null,
+            ];
+        }
+
+        $dataArray = array(
         'dreamscape' => $response
-        , 'balance' => $response->data->balance
-        , 'currency' => $response->data->currency
-      );
+        , 'balance' => $response->data->balance ?? null
+        , 'currency' => $response->data->currency ?? null
+        );
 
-      return $dataArray;
+        return $dataArray;
     }
 
     public function generateOutput($data)
